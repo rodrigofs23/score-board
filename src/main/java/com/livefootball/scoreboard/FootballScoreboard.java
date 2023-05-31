@@ -24,11 +24,15 @@ public class FootballScoreboard {
     }
 
     public void finishMatch(String homeTeam, String awayTeam) {
-        matches.removeIf(match -> match.getHomeTeam().equals(homeTeam) && match.getAwayTeam().equals(awayTeam));
+        matches.stream()
+                .filter(match -> match.getHomeTeam().equals(homeTeam) && match.getAwayTeam().equals(awayTeam))
+                .findFirst()
+                .ifPresent(match -> match.setStatus(MatchStatus.FINISHED));
     }
 
     public List<String> getMatchesInProgressSummary() {
         return matches.stream()
+                .filter(match -> match.getStatus() == MatchStatus.IN_PROGRESS)
                 .sorted((match1, match2) -> {
                     int score1 = match1.getHomeScore() + match1.getAwayScore();
                     int score2 = match2.getHomeScore() + match2.getAwayScore();

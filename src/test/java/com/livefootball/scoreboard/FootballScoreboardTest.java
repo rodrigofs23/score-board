@@ -61,4 +61,55 @@ class FootballScoreboardTest {
         assertEquals("Argentina 3 - 1 Australia", summary.get(2));
         assertEquals("Germany 2 - 2 France", summary.get(3));
     }
+
+    @Test
+    void givenNoMatchesStarted_shouldReturnEmptySummary() {
+        List<String> summary = scoreboard.getMatchesInProgressSummary();
+        Assertions.assertEquals(0, summary.size());
+    }
+
+    @Test
+    void givenMissingMatch_whenUpdateScore_thenScoreNotUpdated() {
+        scoreboard.startMatch("Mexico", "Canada");
+        scoreboard.updateScore("Spain", "Brazil", 10, 2);
+        List<String> summary = scoreboard.getMatchesInProgressSummary();
+        Assertions.assertEquals(1, summary.size());
+        Assertions.assertEquals("Mexico 0 - 0 Canada", summary.get(0));
+    }
+
+    @Test
+    void givenMissingMatch_whenFinishMatch_thenMatchNotFinished() {
+        scoreboard.startMatch("Mexico", "Canada");
+        scoreboard.finishMatch("Spain", "Brazil");
+        List<String> summary = scoreboard.getMatchesInProgressSummary();
+        Assertions.assertEquals(1, summary.size());
+        Assertions.assertEquals("Mexico 0 - 0 Canada", summary.get(0));
+    }
+
+    @Test
+    void givenInProgressMatch_whenFinishMatch_thenMatchFinished() {
+        scoreboard.startMatch("Mexico", "Canada");
+        scoreboard.finishMatch("Mexico", "Canada");
+        List<String> summary = scoreboard.getMatchesInProgressSummary();
+        Assertions.assertEquals(0, summary.size());
+    }
+
+    @Test
+    void givenFinishedMatch_whenUpdateScore_thenScoreNotUpdated() {
+        scoreboard.startMatch("Mexico", "Canada");
+        scoreboard.finishMatch("Mexico", "Canada");
+        scoreboard.updateScore("Mexico", "Canada", 2, 1);
+        List<String> summary = scoreboard.getMatchesInProgressSummary();
+        Assertions.assertEquals(0, summary.size());
+    }
+
+    @Test
+    void givenFinishedMatch_whenFinishMatch_thenMatchNotFinished() {
+        scoreboard.startMatch("Mexico", "Canada");
+        scoreboard.finishMatch("Mexico", "Canada");
+        scoreboard.finishMatch("Mexico", "Canada");
+        List<String> summary = scoreboard.getMatchesInProgressSummary();
+        Assertions.assertEquals(0, summary.size());
+    }
+
 }

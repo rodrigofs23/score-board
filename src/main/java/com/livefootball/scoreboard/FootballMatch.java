@@ -17,6 +17,7 @@ public class FootballMatch {
     private int homeScore;
     private int awayScore;
     private LocalDateTime startTime;
+    private MatchStatus status;
 
     public FootballMatch(String homeTeam, String awayTeam) {
         this.homeTeam = homeTeam;
@@ -24,6 +25,7 @@ public class FootballMatch {
         this.homeScore = 0;
         this.awayScore = 0;
         this.startTime = LocalDateTime.now();
+        this.status = MatchStatus.IN_PROGRESS;
     }
 
     public void updateScore(int homeScore, int awayScore) {
