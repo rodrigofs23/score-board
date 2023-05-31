@@ -5,23 +5,40 @@ import java.util.List;
 
 public class FootballScoreboard {
 
-    List<String> score = new ArrayList<>();
+    private final List<FootballMatch> matches;
 
-    public void startMatch(String homeTeam, String awayTeam) {
-        score.add("Mexico 0 - 0 Canada");
+    public FootballScoreboard() {
+        this.matches = new ArrayList<>();
     }
 
-    public List<String> getMatchesInProgressSummary() {
-        return score;
+    public void startMatch(String homeTeam, String awayTeam) {
+        FootballMatch match = new FootballMatch(homeTeam, awayTeam);
+        matches.add(match);
     }
 
     public void updateScore(String homeTeam, String awayTeam, int homeScore, int awayScore) {
-        score = new ArrayList<>();
-        score.add("Mexico 0 - 5 Canada");
+        matches.stream()
+                .filter(match -> match.getHomeTeam().equals(homeTeam) && match.getAwayTeam().equals(awayTeam))
+                .findFirst()
+                .ifPresent(match -> match.updateScore(homeScore, awayScore));
     }
 
     public void finishMatch(String homeTeam, String awayTeam) {
-        score.clear();
-        System.out.println(score.toString());
+        matches.removeIf(match -> match.getHomeTeam().equals(homeTeam) && match.getAwayTeam().equals(awayTeam));
     }
+
+    public List<String> getMatchesInProgressSummary() {
+        return matches.stream()
+                .sorted((match1, match2) -> {
+                    int score1 = match1.getHomeScore() + match1.getAwayScore();
+                    int score2 = match2.getHomeScore() + match2.getAwayScore();
+                    if (score1 == score2) {
+                        return match2.getStartTime().compareTo(match1.getStartTime());
+                    }
+                    return score2 - score1;
+                })
+                .map(FootballMatch::toString)
+                .toList();
+    }
+
 }
