@@ -1,16 +1,12 @@
 package com.livefootball.scoreboard;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class FootballMatch {
     private String homeTeam;
     private String awayTeam;
