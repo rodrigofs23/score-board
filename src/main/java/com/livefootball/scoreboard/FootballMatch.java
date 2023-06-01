@@ -33,6 +33,10 @@ public class FootballMatch {
         this.awayScore = awayScore;
     }
 
+    public int getTotalScore() {
+        return homeScore + awayScore;
+    }
+
     public String toString() {
         return String.format("%s %d - %d %s", homeTeam, homeScore, awayScore, awayTeam);
     }

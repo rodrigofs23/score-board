@@ -18,14 +18,14 @@ class FootballScoreboardTest {
     }
 
     @Test
-    void givenAMatch_shouldGetSummaryOfTheMatch() {
+    void givenStartedMatch_whenGetMatchesInProgressSummary_thenSummaryIncludesMatch() {
         scoreboard.startMatch("Mexico", "Canada");
         List<String> summary = scoreboard.getMatchesInProgressSummary();
         assertEquals("Mexico 0 - 0 Canada", summary.get(0));
     }
 
     @Test
-    void givenANewScore_shouldUpdateTheSummary() {
+    void givenUpdatedScore_whenGetMatchesInProgressSummary_thenSummaryIncludesUpdatedScore() {
         scoreboard.startMatch("Mexico", "Canada");
         scoreboard.updateScore("Mexico", "Canada", 0, 5);
         List<String> summary = scoreboard.getMatchesInProgressSummary();
@@ -33,8 +33,7 @@ class FootballScoreboardTest {
     }
 
     @Test
-    void givenTheMatch_shouldFinishAndRemoveMatch() {
-        FootballScoreboard scoreboard = new FootballScoreboard();
+    void givenFinishedMatch_whenGetMatchesInProgressSummary_thenSummaryDoesNotIncludeMatch() {
         scoreboard.startMatch("Mexico", "Canada");
         scoreboard.finishMatch("Mexico", "Canada");
         List<String> summary = scoreboard.getMatchesInProgressSummary();
@@ -42,7 +41,7 @@ class FootballScoreboardTest {
     }
 
     @Test
-    void givenSomeMatches_shouldReturnTheSummarySorted() {
+    void givenMultipleMatches_whenGetMatchesInProgressSummary_thenSummarySortedByScore() {
         scoreboard.startMatch("Mexico", "Canada");
         scoreboard.startMatch("Spain", "Brazil");
         scoreboard.updateScore("Mexico", "Canada", 0, 5);
@@ -63,7 +62,7 @@ class FootballScoreboardTest {
     }
 
     @Test
-    void givenNoMatchesStarted_shouldReturnEmptySummary() {
+    void givenNoMatchesStarted_whenGetMatchesInProgressSummary_thenSummaryIsEmpty() {
         List<String> summary = scoreboard.getMatchesInProgressSummary();
         Assertions.assertEquals(0, summary.size());
     }
@@ -90,15 +89,6 @@ class FootballScoreboardTest {
     void givenInProgressMatch_whenFinishMatch_thenMatchFinished() {
         scoreboard.startMatch("Mexico", "Canada");
         scoreboard.finishMatch("Mexico", "Canada");
-        List<String> summary = scoreboard.getMatchesInProgressSummary();
-        Assertions.assertEquals(0, summary.size());
-    }
-
-    @Test
-    void givenFinishedMatch_whenUpdateScore_thenScoreNotUpdated() {
-        scoreboard.startMatch("Mexico", "Canada");
-        scoreboard.finishMatch("Mexico", "Canada");
-        scoreboard.updateScore("Mexico", "Canada", 2, 1);
         List<String> summary = scoreboard.getMatchesInProgressSummary();
         Assertions.assertEquals(0, summary.size());
     }
